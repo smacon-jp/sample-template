@@ -49,9 +49,9 @@
             <a class="nav-link link text-black dropdown-toggle show display-4" href="#" data-toggle="dropdown-submenu" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="true">マイページ</a>
             <div class="dropdown-menu show" data-bs-popper="none" aria-labelledby="dropdown-826">
                 @if(session('customer_id'))
-                    <a class="dropdown-item p-3" href="/mypage/"><i class="far fa-id-card"></i> 予約状況</a>
-                    <a class="dropdown-item p-3" href="/mypage/update/"><i class="far fa-id-badge"></i> プロフィールの更新</a>
-                    <a class="dropdown-item p-3" href="/mypage/change-pwd/"><i class="fas fa-unlock-alt"></i> パスワードの変更</a>
+                    <a class="dropdown-item p-3" href="/mypage/reservation-status"><i class="far fa-id-card"></i> 予約状況</a>
+                    <a class="dropdown-item p-3" href="/mypage/customer-profile-edit-settings"><i class="far fa-id-badge"></i> プロフィールの更新</a>
+                    <a class="dropdown-item p-3" href="/mypage/account-password-change"><i class="fas fa-unlock-alt"></i> パスワードの変更</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item p-3" href="/logout"><i class="fas fa-sign-out-alt"></i> ログアウト</a>
                 @else

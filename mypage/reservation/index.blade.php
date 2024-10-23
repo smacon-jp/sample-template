@@ -1,6 +1,7 @@
 @extends('main.layouts.app')
 @section('title', '仮予約（要連絡） - マイページ')
 @section('content')
+
 <section data-bs-version="5.1" class="header5 cid-u7kWQ3BL1M" id="header05-1t">
         <div class="container">
             <div class="row justify-content-center">

@@ -1,194 +1,181 @@
 @extends('main.layouts.app')
+@section('page_css')
+    <link href="{{asset('/html/main/assets/bootstrap/css/bootstrap-select.min.css')}}" rel="stylesheet" type="text/css"/>
+    <link href="{{asset('/html/main/assets/bootstrap/css/datepicker.css')}}" rel="stylesheet" type="text/css"/>
+    <style>
+        .mbr-section-btn .btn:not(.btn-form) {
+            border-radius: 0px;
+        }
+        .form-control{
+            border-radius: 0px !important;
+        }
+    </style>
+@endsection
 @section('title', '予約')
 @section('content')
-@section('page_css')
-        <link href="{{asset('/html/main/assets/bootstrap/css/bootstrap-select.min.css')}}" rel="stylesheet" type="text/css"/>
-        <link href="{{asset('/html/main/assets/bootstrap/css/datepicker.css')}}" rel="stylesheet" type="text/css"/>
-        <style>
-            .mbr-section-btn .btn:not(.btn-form) {
-                border-radius: 0px;
-            }
-            .form-control{
-                border-radius: 0px !important;
-            }
-        </style>
-@stop
-<section data-bs-version="5.1" class="header5 cid-u7kWQ3BL1M" id="header05-1t">
+    <section class="reservation-menus">
         <div class="container">
+            <h1 class="text-center mt-5 mb-5">予約</h1>
             <div class="row justify-content-center">
-                <div class="col-12 content-head">
-                    <div class="mbr-section-head mb-5">
-                        <h3 class="mbr-section-title mbr-fonts-style align-center mb-0 display-2"><strong>予約</strong></h3>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-<section data-bs-version="5.1" class="form03 reservation-menus cid-u74FbjrbCE" id="form03-10">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-12 col-lg-8">
-                @foreach($menus as $menu)
-                    <div class=" bg-white px-3 py-2 mb-3 reservation-menu-item rounded-0">
-                        <div class="row align-items-center">
-                            <div class="col-12 col-md-3">
-                                <div class="image-wrapper">
-                                    <img src="{{$menu->MainImagePath}}" alt="予約倶楽部 （Basic）" data-slide-to="0" data-bs-slide-to="0">
+                <div class="col-12 col-lg-8">
+                    @foreach($menus as $menu)
+                        <div class="card mb-3 reservation-menu-item border-0 shadow-sm">
+                            <div class="row g-0 align-items-center">
+                                <div class="col-4 col-md-3">
+                                    <img src="{{$menu->MainImagePath}}" class="img-fluid rounded-start" alt="{{$menu->name}}" style="object-fit: cover; height: 120px; width: 100%;">
+                                </div>
+                                <div class="col-8 col-md-9">
+                                    <div class="card-body py-2">
+                                        <h5 class="card-title fs-6 fw-bold mb-1">{{$menu->name}}</h5>
+                                        <p class="card-text small mb-2" style="line-height: 1.4;">{{Str::limit($menu->description, 60)}}</p>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span class="fs-6 fw-bold text-primary">{{number_format($menu->price)}}円<small class="text-muted fw-normal">(税込)</small></span>
+                                            <a href="javascript:void(0)"
+                                               data-menuid="{{$menu->id}}"
+                                               data-menuprice="{{$menu->price}}"
+                                               data-menuname="{{$menu->name}}"
+                                               class="btn btn-sm btn-outline-primary order-menus">
+                                                予約する
+                                            </a>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-12 col-md">
-                                <div class="card-box">
-                                    <div class="row align-items-center">
-                                        <div class="col-md">
-                                            <h5 class="card-title mbr-fonts-style">{{$menu->name}}</h5>
-                                            <p class="mbr-text text-black">{{$menu->description}}</p>
+                        </div>
+                    @endforeach
+
+                    @if($srs->isAcceptableSeatsOnly)
+                        <div class="card mb-3 reservation-menu-item border-0 shadow-sm bg-light">
+                            <div class="row g-0 align-items-center">
+                                <div class="col-4 col-md-3">
+                                    <img src="{{asset('html/main/assets/images/table-01.jpg')}}" class="img-fluid rounded-start" alt="席だけ予約" style="object-fit: cover; height: 120px; width: 100%;">
+                                </div>
+                                <div class="col-8 col-md-9">
+                                    <div class="card-body py-2">
+                                        <h5 class="card-title fs-6 fw-bold mb-1">席だけ予約</h5>
+                                        <p class="card-text small mb-2" style="line-height: 1.4;">お店では、予約した日時に合わせて、仲間と一緒に飲食することができます。</p>
+                                        <p class="card-text"><small class="text-danger">※ 団体様のコースは予約時相談</small></p>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span class="fs-6 fw-bold text-primary">0円<small class="text-muted fw-normal">(税込)</small></span>
+                                            <a href="javascript:void(0)"
+                                               data-menuid="0"
+                                               data-menuprice="0"
+                                               data-menuname="席のみ予約"
+                                               class="btn btn-sm btn-primary order-menus">
+                                                席のみ予約
+                                            </a>
                                         </div>
-                                        <div class="col-md-auto text-center">
-                                            <p class="price mbr-fonts-style fw-bold">{{number_format($menu->price)}}円<small>(税込)</small></p>
-                                            <div class="mbr-section-btn">
-                                                <a href="javascript:void(0)" data-menuid="{{$menu->id}}" data-menuprice="{{$menu->price}}" data-menuname="{{$menu->name}}" class="btn btn-info order-menus">このメニューを予約する</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+                </div>
+                <div class="col-12 col-lg-4 item-wrapper">
+                    <div class="top-sticky reservation-sidebar">
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <h3 class="mbr-fonts-style text-center mb-3 fw-bold">予約する</h3>
+                                <p class="text-center mb-4">日時と人数は適宜選択してください。</p>
+                                <div class="col-lg-12 mx-auto mbr-form">
+                                    <div class="row">
+                                        <input type="hidden" id="shop_id" value="1">
+                                        <div class="col-12 form-group mb-3 text-center" data-for="resrvCalendar">
+                                            <input type="text" id="resrvCalendar" placeholder="Select Date" class="form-control dateselect" autocomplete="off" value="" data-control="datepicker" data-format="mm/dd/yyyy" data-language="jp" readonly="readonly">
+                                        </div>
+                                        <div class="col-6 form-group mb-3" data-for="guest_num">
+                                            <div class="input-group">
+                                                <select class="select_people form-control form-select w-100" data-dropup-auto="false" data-size="10" aria-label="select" name="guest_num">
+                                                    @for ($i = $shop_min_cap; $i <= $shopinfo->max_capacity; $i++)
+                                                        <option value="{{$i}}" {{$i === 2 ? 'selected': ''}} >{{$i}}名</option>
+                                                    @endfor
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-6 form-group mb-3">
+                                            <div class="input-group">
+                                                <span class="input-group-text"><i class="fas fa-clock"></i></span>
+                                                <select class="store_reservable_time form-control form-select" data-dropup-auto="false" data-size="5" aria-label="select" name="time" title="予約時間の選択" required>
+                                                </select>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                @endforeach
-                @if($srs->isAcceptableSeatsOnly)
-                <div class="reservation-menu-item bg-white px-3 py-2 mb-3">
-                    <div class="row align-items-center">
-                        <div class="col-12 col-md-3">
-                            <div class="image-wrapper">
-                                <img src="{{asset('html/main/assets/images/table-01.jpg')}}" alt="予約倶楽部 （Basic）" data-slide-to="0" data-bs-slide-to="0">
-                            </div>
-                        </div>
-                        <div class="col-12 col-md">
-                            <div class="card-box">
-                                <div class="row align-items-center">
-                                    <div class="col-md">
-                                        <h6 class="card-title mbr-fonts-style">
-                                            <strong>席だけ予約</strong>
-                                        </h6>
-                                        <p class="para mb-2">お店では、予約した日時に合わせて、仲間と一緒に飲食することができます。</p>
-                                        <p><span class="text-red">※ 団体様のコースにつきましては、ご予約時にご相談ください。</span> </p>
-                                    </div>
-                                    <div class="col-md-auto text-center">
-                                        <p class="price mbr-fonts-style">0円(税込)</p>
-                                        <div class="mbr-section-btn">
-                                            <a href="javascript:void(0)" data-menuid="0" data-menuprice="0" data-menuname="席のみ予約"  class="btn btn-info order-menus">このメニューを予約する</a>
+                        <div class="card mb-3 border-0 p-0">
+                            <div class="card-body p-0">
+                                <form class="reservation-form" method="POST" action="/reservation_confirmation">
+                                    @csrf
+                                    <input type="hidden" id="menu_id" name="menu_id" value="{{old('menu_id')}}">
+                                    <input type="hidden" id="menu_price" name="menu_price" value="{{old('menu_price')}}">
+                                    <input type="hidden" id="menu_name" name="menu_name" value="{{old('menu_name')}}">
+                                    <input type="hidden" id="reservation_time" name="reservation_time" value="{{old('reservation_time')}}">
+                                    <input type="hidden" id="reservation_date" name="reservation_date" value="{{old('reservation_date')}}">
+                                    <input type="hidden" id="guest_num" name="guest_num" value="2">
+                                    <div class="card p-0 w-100">
+                                        <div class="card-header text-center fw-bold bg-primary text-white">予約概要</div>
+                                        <div class="card-body p-3">
+                                            <div class="order-cont">
+                                                <table class="booking-info table table-borderless">
+                                                    <tr>
+                                                        <td>予約日</td>
+                                                        <td class="fw-bold reservation_date">2022年04月08日 (金)</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>予約時間</td>
+                                                        <td class="fw-bold reservation_time">予約時間の選択</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>予約人数</td>
+                                                        <td class="fw-bold guest_num">2名</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>予約コース</td>
+                                                        <td class="fw-bold menu_name">席のみ予約</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>コース料金</td>
+                                                        <td class="fw-bold course_price">0円</td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="card-footer bg-white">
+                                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                                <span>合計金額</span>
+                                                <div class="total-price">
+                                                    <strong class="total_price text-primary h4">0円</strong>
+                                                    <span class="text-primary small">(税込)</span>
+                                                </div>
+                                            </div>
+                                            <div class="text-end mb-3">
+                                                <span class="bill-calculation small text-muted">0円 × 2名</span>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="reservation_note" class="form-label">予約備考</label>
+                                                <textarea class="form-control" id="reservation_note" name="reservation_note" placeholder="ご要望がありましたらお書きください。"></textarea>
+                                            </div>
+                                            <button type="submit" class="btn btn-primary w-100">予約へすすむ</button>
                                         </div>
                                     </div>
-                                </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="card p-0 w-100">
+                            <div class="card-body">
+                                <h4 class="card-title">お店お知らせ</h4>
+                                <p class="card-text">開始時間 11:30 AM. 終了時刻は午後11時です。終了時刻の1時間前まで予約可能です。</p>
+                                <a href="tel:050-5213-7364" class="btn btn-danger btn-lg w-100">
+                                    <i class="fa fa-phone-volume"></i> 050-5213-7364
+                                </a>
                             </div>
                         </div>
                     </div>
-                </div>
-                @endif
-            </div>
-            <div class="col-12 col-lg-4 item-wrapper">
-                <div class="top-sticky reservation-sidebar">
-                    <div class="card bg-white p-2 mb-3">
-                        <h3 class="mbr-fonts-style align-center mb-0 fw-bold pt-4">予約する</h3>
-                        <p class="text-center pt-4">日時と人数は適宜選択してください。</p>
-                        <div class="col-lg-12 mx-auto mbr-form">
-                            <div class="row">
-                              <input type="hidden" id="shop_id" value="1">
-                              <div class="col-12 col-md-12 form-group mb-3 mb-3 text-center" data-for="resrvCalendar">
-                                  <input type="text" id="resrvCalendar" placeholder="Select Date" class="form-control dateselect" autocomplete="off" value="" data-control="datepicker" data-format="mm/dd/yyyy" data-language="jp" readonly="readonly">
-                              </div>
-                              <div class="col-12 col-md-6 form-group mb-3" data-for="guest_num">
-                                  <div class="input-group">
-                                      <select class="select_people form-control form-select w-100" data-dropup-auto="false" data-size="10" aria-label="select" name="guest_num">
-                                          @for ($i = $shop_min_cap; $i <= $shopinfo->max_capacity; $i++)
-                                              <option value="{{$i}}" {{$i === 2 ? 'selected': ''}} >{{$i}}名</option>
-                                          @endfor
-                                      </select>
-                                  </div>
-                              </div>
-                              <div class="col-12 col-md-6 mb-2 form-group">
-                                  <div class="input-group">
-                                      <span class="input-group-addon"><i class="fas fa-clock"></i></span>
-                                      <select class=" store_reservable_time form-control form-select" data-dropup-auto="false" data-size="5" aria-label="select" name="time" title="予約時間の選択" required>
-                                      </select>
-                                  </div>
-                              </div>
-                          </div>
-                        </div>
-                    </div>
-                    <div class="card bg-white p-2 mb-3">
-                    <form class="reservation-form m-0 p-0" method="POST" action="/reservation_confirmation">
-                        @csrf
-                        <input type="hidden" id="menu_id" name="menu_id" value="{{old('menu_id')}}">
-                        <input type="hidden" id="menu_price" name="menu_price" value="{{old('menu_price')}}">
-                        <input type="hidden" id="menu_name" name="menu_name" value="{{old('menu_name')}}">
-                        <input type="hidden" id="reservation_time" name="reservation_time" value="{{old('reservation_time')}}">
-                        <input type="hidden" id="reservation_date" name="reservation_date" value="{{old('reservation_date')}}">
-                        <input type="hidden" id="guest_num" name="guest_num" value="2">
-                        <div class="card w-100">
-                            <div class="card-header text-center font-weight-bold bg-primary text-white">予約概要</div>
-                            <div class="card-body p-2 p-md-3">
-                                <div class="order-cont">
-                                    <table class="booking-info table table-borderless">
-                                        <tr>
-                                            <td>予約日</td>
-                                            <td class="font-weight-bold reservation_date">2022年04月08日 (金)</td>
-                                        </tr>
-                                        <tr>
-                                            <td>予約時間</td>
-                                            <td class="font-weight-bold reservation_time">予約時間の選択</td>
-                                        </tr>
-                                        <tr>
-                                            <td>予約人数</td>
-                                            <td class="font-weight-bold guest_num">2名</td>
-                                        </tr>
-                                        <tr>
-                                            <td>予約コース</td>
-                                            <td class="font-weight-bold menu_name">席のみ予約</td>
-                                        </tr>
-                                        <tr>
-                                            <td>コース料金</td>
-                                            <td class="font-weight-bold course_price">0円</td>
-                                        </tr>
-                                    </table>
-                                    <hr class="m-0">
-                                </div>
-                            </div>
-                            <div class="bg-white border-top-0 card-footer pt-2 pt-md-0">
-                                <div class="d-flex justify-content-between pb-2 pb-md-0">
-                                    <span>合計金額</span>
-                                    <div class="total-price"> <strong class="total_price text-primary h4">0円</strong><span class="text-primary small">(税込)</span></div>
-                                </div>
-                                <div class="d-flex justify-content-end pb-2 pb-md-0">
-                                    <span class="bill-calculation small text-muted">0円 × 2名</span>
-                                </div>
-                                <input type="hidden" id="shop_id" value="1">
-                                <h6>予約備考</h6>
-                                <textarea class="form-control mb-2" name="reservation_note" placeholder="ご要望がありましたらお書きください。"></textarea>
-                                <button type="submit" class="btn btn-primary w-100">予約へすすむ</button>
-                            </div>
-                        </div>
-                    </form>
-                    </div>
-                    <div class="card bg-white p-2 mb-3">
-                    <div class="reservation-notice mb-3">
-                        <div class="bg-white p-3 rounded shadow mb-3">
-                            <div class="alert alert-info m-0" role="alert">
-                                <h4 class="alert-heading">お店お知らせ</h4>
-                                <p class="mb-0 small">開始時間 11:30 AM. 終了時刻は午後11時です。終了時刻の1時間前まで予約可能です。
-                                <hr>
-                                <a href="tel:050-5213-7364" class="btn btn-danger btn-lg"><i class="fa fa-phone-volume"></i> 050-5213-7364</a>
-                            </div>
-                        </div>
-                    </div>
-                    </div>
-                </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
-
+    </section>
 @endsection
 @section('page_script')
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
